@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyCurrencies</string>
+    <string name="Calculate">Calculate</string>
 </resources>

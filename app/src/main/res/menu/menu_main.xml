@@ -19,7 +19,7 @@
     <item
         android:id="@+id/mnu_change"
         android:orderInCategory="400"
-        android:title="汇率变动"/>
+        android:title="实时汇率"/>
     <item
         android:id="@+id/mnu_exit"
         android:orderInCategory="400"

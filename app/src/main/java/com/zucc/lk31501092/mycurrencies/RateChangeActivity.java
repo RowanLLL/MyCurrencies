@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.zucc.lk31501092.mycurrencies.adapter.RateChangeAdapter;
 import com.zucc.lk31501092.mycurrencies.model.Rate;
@@ -125,6 +126,7 @@ public class RateChangeActivity extends Activity {
                 arrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
                 forSpinner.setAdapter( arrayAdapter );
                 homSpinner.setAdapter( arrayAdapter );
+                forSpinner.setSelection( findPositionGivenCode( "CNY", mSimpleCurrencies ) );
 
                 mBuilder.setPositiveButton( "OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -132,17 +134,23 @@ public class RateChangeActivity extends Activity {
                         String fcode = forSpinner.getSelectedItem().toString();
                         String hcode = homSpinner.getSelectedItem().toString();
 
-                        Rate rate = new Rate();
-                        rate.setForCode( fcode );
-                        rate.setHomCode( hcode );
-                        rate.setAmount( Calculate( fcode, hcode ) );
-                        rate.save();
+                        if (fcode.equals( hcode )) {
+                            Toast.makeText( getApplicationContext(),"两个币种相同，添加失败！", Toast.LENGTH_SHORT ).show();
+                        } else if (recordIsExisted(fcode, hcode)) {
+                            Toast.makeText( getApplicationContext(),"该记录已存在，请确认！", Toast.LENGTH_SHORT ).show();
+                        } else {
+                            Rate rate = new Rate();
+                            rate.setForCode( fcode );
+                            rate.setHomCode( hcode );
+                            rate.setAmount( Calculate( fcode, hcode ) );
+                            rate.save();
 
-                        rates.add( rate );
-                        forCode.add( fcode );
-                        homCode.add( hcode );
-                        Amount.add( rate.getAmount() );
-                        adapter.notifyDataSetChanged();
+                            rates.add( rate );
+                            forCode.add( fcode );
+                            homCode.add( hcode );
+                            Amount.add( rate.getAmount() );
+                            adapter.notifyDataSetChanged();
+                        }
 
                         dialogInterface.dismiss();
                     }
@@ -272,5 +280,22 @@ public class RateChangeActivity extends Activity {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private int findPositionGivenCode(String code, String[] currencies) {
+        for (int i = 0; i < currencies.length; i++) {
+            if (currencies[i].equalsIgnoreCase( code )) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private boolean recordIsExisted(String forcode, String homCode) {
+        List<Rate> rates = LitePal.where( "forCode = ? and homCode = ?", forcode, homCode ).find( Rate.class );
+        if (rates.size() > 0)
+            return true;
+        else
+            return false;
     }
 }

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
     android:orientation="vertical">
 
@@ -113,7 +114,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:clickable="true"
-            android:src="@drawable/baseline_add_white_18dp"/>
+            app:fabSize="mini"
+            android:src="@drawable/baseline_add_white_18dp"
+            android:focusable="true" />
 
         <ListView
             android:id="@+id/listview_rates"

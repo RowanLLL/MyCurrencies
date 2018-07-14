@@ -1,5 +1,6 @@
 package com.zucc.lk31501092.mycurrencies;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,20 +36,28 @@ public class RateChartActivity extends Activity {
     List<Long> times = new ArrayList<>();
     List<AxisValue> axisValues = new ArrayList<>();
     LineChartView chart;
+    TextView forCode_TextView;
+    TextView homCode_TextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_chart );
         chart = findViewById( R.id.chart );
+        forCode_TextView = findViewById( R.id.chart_forCode );
+        homCode_TextView = findViewById( R.id.chart_homCode );
 
         Intent intent = getIntent();
         String forCode = intent.getStringExtra( "forCode" );
         String homCode = intent.getStringExtra( "homCode" );
 
+        forCode_TextView.setText( forCode );
+        homCode_TextView.setText( homCode );
+
         new CalculateRateTask().execute( forCode, homCode );
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CalculateRateTask extends AsyncTask<String, Void, Boolean> {
         Boolean isSame = true;
 
@@ -59,7 +69,7 @@ public class RateChartActivity extends Activity {
             String strAmount = "1";
 
             rateRecords = LitePal.order( "timestamp DESC" ).limit( 5 ).find( RateRecord.class );
-            for (int i = rateRecords.size() - 1; i >= 0; i--) {
+            for (int i = rateRecords.size() - 1; i >= 0; i--)
                 try {
                     double rate = 0;
 
@@ -82,15 +92,13 @@ public class RateChartActivity extends Activity {
                     e.printStackTrace();
                     return false;
                 }
-
-            }
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             try {
-                if (aBoolean == false) {
+                if (!aBoolean) {
                     throw new Exception( "no data available." );
                 }
                 ArrayList<PointValue> values = new ArrayList<>();//折线上的点
@@ -104,7 +112,7 @@ public class RateChartActivity extends Activity {
                             isSame = false;
                     }
 
-                    SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH时" );
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH时" );
                     formatter.setTimeZone( TimeZone.getTimeZone( "GMT+8:00" ) );
                     String time = formatter.format( new Date( times.get( i ) * 1000 ) );
                     AxisValue axisValue = new AxisValue( i );

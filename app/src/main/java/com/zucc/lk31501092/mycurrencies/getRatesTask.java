@@ -5,8 +5,11 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class getRatesTask extends AsyncTask<String, Void, JSONObject> {
 
@@ -22,10 +25,16 @@ public class getRatesTask extends AsyncTask<String, Void, JSONObject> {
             if (jsonObject == null) {
                 throw new JSONException( "no data available." );
             }
-            RateRecord rateRecord = new RateRecord();
-            rateRecord.setTimestamp( jsonObject.getLong( "timestamp" ) );
-            rateRecord.setRates( jsonObject.getJSONObject( "rates" ) + "" );
-            rateRecord.save();
+            List<RateRecord> list = new ArrayList<>();
+            list = LitePal.where( "timestamp = ?", jsonObject.getLong( "timestamp" )+"" ).find( RateRecord.class );
+            if (list.size() > 0) {
+                Log.d( "isExisted", "True" );
+            } else {
+                RateRecord rateRecord = new RateRecord();
+                rateRecord.setTimestamp( jsonObject.getLong( "timestamp" ) );
+                rateRecord.setRates( jsonObject.getJSONObject( "rates" ) + "" );
+                rateRecord.save();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

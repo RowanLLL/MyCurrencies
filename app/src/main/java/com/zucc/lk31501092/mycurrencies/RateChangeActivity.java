@@ -1,6 +1,7 @@
 package com.zucc.lk31501092.mycurrencies;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -48,9 +50,19 @@ public class RateChangeActivity extends Activity {
         adapter = new RateChangeAdapter( this, R.layout.rates_list, rates );
         adapter.notifyDataSetChanged();
 
-        ListView listView = findViewById( R.id.listview_rates );
+        final ListView listView = findViewById( R.id.listview_rates );
         listView.setAdapter( adapter );
         listView.setTextFilterEnabled( true );
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d( "click", i + "" );
+                Intent intent = new Intent( listView.getContext(), RateChartActivity.class );
+                intent.putExtra( "forCode", rates.get( i ).getForCode() );
+                intent.putExtra( "homCode", rates.get( i ).getHomCode() );
+                startActivity( intent );
+            }
+        } );
     }
 
     private void initDatas() {

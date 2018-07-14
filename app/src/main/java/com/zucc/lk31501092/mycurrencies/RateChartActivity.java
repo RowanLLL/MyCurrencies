@@ -2,38 +2,52 @@ package com.zucc.lk31501092.mycurrencies;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class RateChartActivity extends Activity {
-    List<Double> changeRates = new ArrayList<>();
+    List<String> changeRates = new ArrayList<>();
+    List<Long> times = new ArrayList<>();
+    List<AxisValue> axisValues = new ArrayList<>();
+    LineChartView chart;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        
+        setContentView( R.layout.activity_chart );
+        chart = findViewById( R.id.chart );
+
+        Intent intent = getIntent();
+        String forCode = intent.getStringExtra( "forCode" );
+        String homCode = intent.getStringExtra( "homCode" );
+
+        new CalculateRateTask().execute( forCode, homCode );
     }
 
     private class CalculateRateTask extends AsyncTask<String, Void, Boolean> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog( RateChartActivity.this );
-            progressDialog.setTitle( "Calculating Result..." );
-            progressDialog.setMessage( "One moment please..." );
-            progressDialog.setCancelable( false );
-            progressDialog.show();
-        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -42,10 +56,13 @@ public class RateChartActivity extends Activity {
             String strHomCode = strings[1];
             String strAmount = "1";
 
-            rateRecords = LitePal.order( "timestamp" ).limit( 10 ).find( RateRecord.class );
+            rateRecords = LitePal.order( "timestamp DESC" ).limit( 10 ).find( RateRecord.class );
             for (int i = 9; i >= 0; i--) {
                 try {
                     double rate = 0;
+
+                    times.add( rateRecords.get( i ).getTimestamp() );
+
                     JSONObject jsonRates = new JSONObject( rateRecords.get( i ).getRates() );
                     if (strHomCode.equalsIgnoreCase( "USD" )) {
                         rate = Double.parseDouble( strAmount ) /
@@ -58,7 +75,7 @@ public class RateChartActivity extends Activity {
                                 jsonRates.getDouble( strHomCode )
                                 / jsonRates.getDouble( strForCode );
                     }
-                    changeRates.add( rate );
+                    changeRates.add( new DecimalFormat( "0.0000" ).format( rate ) );
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return false;
@@ -66,6 +83,51 @@ public class RateChartActivity extends Activity {
 
             }
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            try {
+                if (aBoolean == false) {
+                    throw new Exception( "no data available." );
+                }
+                ArrayList<PointValue> values = new ArrayList<>();//折线上的点
+                for (int i = 0; i < changeRates.size(); i++) {
+//                    Log.d( "你好", changeRates.get( i ) );
+                    values.add( new PointValue( i, (float) Double.parseDouble( changeRates.get( i ) ) ) );
+
+                    SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH" );
+                    formatter.setTimeZone( TimeZone.getTimeZone( "GMT+8:00" ) );
+                    String time = formatter.format( new Date( times.get( i ) * 1000 ) );
+                    AxisValue axisValue = new AxisValue( i );
+                    axisValue.setLabel( time );
+                    axisValues.add( axisValue );
+                }
+
+
+                ArrayList<Line> lines = new ArrayList<>();
+                Line line = new Line( values ).setColor( Color.BLACK );//声明线并设置颜色
+                line.setCubic( false );//设置是平滑的还是直的
+                line.setHasLabels( false );
+                lines.add( line );
+
+                LineChartData data = new LineChartData();
+                Axis axisX = new Axis( axisValues );//x轴
+                Axis axisY = new Axis();//y轴
+                axisX.setTextColor( Color.BLACK );
+                axisY.setTextColor( Color.BLACK );
+                data.setAxisXBottom( axisX );
+                data.setAxisYLeft( axisY );
+                data.setLines( lines );
+                data.setValueLabelBackgroundEnabled( true );
+                chart.setLineChartData( data );
+                chart.setValueSelectionEnabled( false );
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

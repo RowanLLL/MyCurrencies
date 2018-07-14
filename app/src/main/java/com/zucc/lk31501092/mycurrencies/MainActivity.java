@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 record.setForAmount( strAmount );
                 record.setHomCode( strHomCode );
                 record.setHomAmount( new DecimalFormat( "0.00" ).format( dCalculated ) );
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "yy/MM/dd HH:mm" );
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "yyyy/MM/dd HH:mm" );
                 Date curDate = new Date( System.currentTimeMillis() );
                 record.setTime( formatter.format( curDate ) );
                 record.save();

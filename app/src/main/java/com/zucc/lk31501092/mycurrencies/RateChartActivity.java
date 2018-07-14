@@ -26,6 +26,7 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class RateChartActivity extends Activity {
@@ -48,6 +49,7 @@ public class RateChartActivity extends Activity {
     }
 
     private class CalculateRateTask extends AsyncTask<String, Void, Boolean> {
+        Boolean isSame = true;
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -92,9 +94,15 @@ public class RateChartActivity extends Activity {
                     throw new Exception( "no data available." );
                 }
                 ArrayList<PointValue> values = new ArrayList<>();//折线上的点
+                float beforeValue = (float) Double.parseDouble( changeRates.get( 0 ) );
                 for (int i = 0; i < changeRates.size(); i++) {
 //                    Log.d( "你好", changeRates.get( i ) );
                     values.add( new PointValue( i, (float) Double.parseDouble( changeRates.get( i ) ) ) );
+
+                    if (isSame) {
+                        if (beforeValue != (float) Double.parseDouble( changeRates.get( i ) ))
+                            isSame = false;
+                    }
 
                     SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH时" );
                     formatter.setTimeZone( TimeZone.getTimeZone( "GMT+8:00" ) );
@@ -126,6 +134,13 @@ public class RateChartActivity extends Activity {
                 chart.setLineChartData( data );
                 chart.setValueSelectionEnabled( false );
 
+                if (isSame) {
+                    final Viewport v = new Viewport( chart.getMaximumViewport() );
+                    v.top = (float) (beforeValue + 0.1000); //max value
+                    v.bottom = (float) (beforeValue - 0.1000);  //min value
+                    chart.setMaximumViewport( v );
+                    chart.setCurrentViewport( v );
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

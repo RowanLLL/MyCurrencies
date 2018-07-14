@@ -56,8 +56,8 @@ public class RateChartActivity extends Activity {
             String strHomCode = strings[1];
             String strAmount = "1";
 
-            rateRecords = LitePal.order( "timestamp DESC" ).limit( 10 ).find( RateRecord.class );
-            for (int i = 9; i >= 0; i--) {
+            rateRecords = LitePal.order( "timestamp DESC" ).limit( 5 ).find( RateRecord.class );
+            for (int i = rateRecords.size() - 1; i >= 0; i--) {
                 try {
                     double rate = 0;
 
@@ -96,13 +96,14 @@ public class RateChartActivity extends Activity {
 //                    Log.d( "你好", changeRates.get( i ) );
                     values.add( new PointValue( i, (float) Double.parseDouble( changeRates.get( i ) ) ) );
 
-                    SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH" );
+                    SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH时" );
                     formatter.setTimeZone( TimeZone.getTimeZone( "GMT+8:00" ) );
                     String time = formatter.format( new Date( times.get( i ) * 1000 ) );
                     AxisValue axisValue = new AxisValue( i );
                     axisValue.setLabel( time );
                     axisValues.add( axisValue );
                 }
+//                values.add( new PointValue( 5, (float) 0.1498 ) );
 
 
                 ArrayList<Line> lines = new ArrayList<>();
@@ -114,6 +115,8 @@ public class RateChartActivity extends Activity {
                 LineChartData data = new LineChartData();
                 Axis axisX = new Axis( axisValues );//x轴
                 Axis axisY = new Axis();//y轴
+                axisX.setHasTiltedLabels( true );
+                axisY.setHasLines( true );
                 axisX.setTextColor( Color.BLACK );
                 axisY.setTextColor( Color.BLACK );
                 data.setAxisXBottom( axisX );

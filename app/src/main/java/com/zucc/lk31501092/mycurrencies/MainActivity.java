@@ -31,9 +31,14 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Properties;
+import java.util.TimeZone;
+
+import static com.zucc.lk31501092.mycurrencies.SplashActivity.KEY_ARRAYLIST;
+import static com.zucc.lk31501092.mycurrencies.SplashActivity.KEY_ARRAYLISTSIMPLE;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private EditText mAmountEditText;
     private Spinner mForSpinner, mHomSpinner;
     private String[] mCurrencies;
+    private String[] mSimpleCurrencies;
 
     public static final String FOR = "FOR_CURRENCY";
     public static final String HOM = "HOM_CURRENCY";
@@ -63,9 +69,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mForSpinner = findViewById( R.id.spn_for );
         mHomSpinner = findViewById( R.id.spn_hom );
 
-        ArrayList<String> arrayList = (ArrayList<String>) getIntent().getSerializableExtra( SplashActivity.KEY_ARRAYLIST );
-        Collections.sort( arrayList );
-        mCurrencies = arrayList.toArray( new String[arrayList.size()] );
+        ArrayList<String> arrayList1 = (ArrayList<String>) getIntent().getSerializableExtra( KEY_ARRAYLIST );
+        ArrayList<String> arrayList2 = (ArrayList<String>) getIntent().getSerializableExtra( KEY_ARRAYLISTSIMPLE );
+        Collections.sort( arrayList1 );
+        Collections.sort( arrayList2 );
+        mCurrencies = arrayList1.toArray( new String[arrayList1.size()] );
+        mSimpleCurrencies = arrayList2.toArray(new String[arrayList2.size()]);
 
         //Spinner数据
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>( this, R.layout.spinner_closed, mCurrencies );
@@ -126,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case R.id.mnu_change:
                 Intent intent1 = new Intent( this, RateChangeActivity.class );
+                intent1.putExtra( KEY_ARRAYLISTSIMPLE, mSimpleCurrencies );
                 startActivity( intent1 );
                 break;
             case R.id.mnu_exit:
@@ -265,7 +275,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 record.setForAmount( strAmount );
                 record.setHomCode( strHomCode );
                 record.setHomAmount( new DecimalFormat( "0.00" ).format( dCalculated ) );
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "yyyy/MM/dd HH:mm" );
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "MM/dd HH:mm" );
+                formatter.setTimeZone( TimeZone.getTimeZone( "GMT+8:00" ) );
                 Date curDate = new Date( System.currentTimeMillis() );
                 record.setTime( formatter.format( curDate ) );
                 record.save();

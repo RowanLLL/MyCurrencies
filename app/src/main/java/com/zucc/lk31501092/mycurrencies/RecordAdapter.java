@@ -14,7 +14,7 @@ import java.util.List;
 public class RecordAdapter extends ArrayAdapter<Record>{
     private  int resourceid;
 
-    public RecordAdapter(@NonNull Context context, int resource, @NonNull List<Record> objects) {
+    RecordAdapter(@NonNull Context context, int resource, @NonNull List<Record> objects) {
         super( context, resource, objects );
         this.resourceid = resource;
     }
@@ -35,6 +35,7 @@ public class RecordAdapter extends ArrayAdapter<Record>{
         TextView homCode = view.findViewById(R.id.homCode);
         TextView homAmount = view.findViewById(R.id.homAmount);
         TextView time = view.findViewById(R.id.time);
+        assert data != null;
         forCode.setText(data.getForCode());
         forAmount.setText(data.getForAmount());
         homCode.setText(data.getHomCode());

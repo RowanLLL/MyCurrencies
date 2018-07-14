@@ -17,6 +17,7 @@
 
         <Spinner
             android:id="@+id/spn_for"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="10dp"
@@ -72,6 +73,7 @@
 
         <Spinner
             android:id="@+id/spn_hom"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="10dp"

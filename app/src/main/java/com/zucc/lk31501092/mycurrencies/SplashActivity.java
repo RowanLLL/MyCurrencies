@@ -18,7 +18,9 @@ import java.util.Iterator;
 public class SplashActivity extends AppCompatActivity {
     public static final String URL_CODES = "http://openexchangerates.org/api/currencies.json";
     public static final String KEY_ARRAYLIST = "key_arraylist";
+    public static final String KEY_ARRAYLISTSIMPLE = "key_arraylist_simple";
     private ArrayList<String> mCurrencies;
+    private ArrayList<String> mSimpleCurrencies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +45,17 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 Iterator iterator = jsonObject.keys();
                 String key = "";
-                mCurrencies = new ArrayList<String>();
+                mCurrencies = new ArrayList<>();
+                mSimpleCurrencies = new ArrayList<>();
                 while (iterator.hasNext()) {
                     key = (String) iterator.next();
                     mCurrencies.add( key + " | " + jsonObject.getString( key ) );
+                    mSimpleCurrencies.add( key );
                 }
 
                 Intent mainIntent = new Intent( SplashActivity.this, MainActivity.class );
                 mainIntent.putExtra( KEY_ARRAYLIST, mCurrencies );
+                mainIntent.putExtra( KEY_ARRAYLISTSIMPLE, mSimpleCurrencies );
                 startActivity( mainIntent );
 
                 finish();

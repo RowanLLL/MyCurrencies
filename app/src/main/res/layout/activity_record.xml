@@ -35,7 +35,7 @@
                 android:background="@drawable/search_frame"
                 android:hint="     输入查询信息..."
                 android:imeOptions="actionDone"
-                android:paddingLeft="32dp"
+                android:paddingLeft="40dp"
                 android:singleLine="true"
                 android:textSize="12sp" />
 

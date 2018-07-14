@@ -93,12 +93,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 String number = mAmountEditText.getText().toString();
-                if (number != null && !number.trim().equals( "" ))
+                if (!number.trim().equals( "" ))
                     new CurrencyConverterTask().execute( URL_BASE + mKey );
             }
         } );
 
         mKey = getKey();
+
+        Intent intent = new Intent( this, getRatesService.class );
+        getRatesService.enqueueWork( getApplicationContext(), intent );
     }
 
     @Override
@@ -121,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Intent intent = new Intent( this, RecordActivity.class );
                 startActivity( intent );
                 break;
+            case R.id.mnu_change:
+                Intent intent1 = new Intent( this, RateChangeActivity.class );
+                startActivity( intent1 );
             case R.id.mnu_exit:
                 finish();
                 break;

@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.zucc.lk31501092.mycurrencies.adapter.RecordAdapter;
+import com.zucc.lk31501092.mycurrencies.model.Record;
+
 import org.litepal.LitePal;
 
 import java.util.ArrayList;

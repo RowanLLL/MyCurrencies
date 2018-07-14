@@ -32,9 +32,9 @@
     	</list>
     -->
     <list>
-        <mapping class="com.zucc.lk31501092.mycurrencies.Record"></mapping>
-        <mapping class="com.zucc.lk31501092.mycurrencies.RateRecord"></mapping>
-        <mapping class="com.zucc.lk31501092.mycurrencies.Rate"></mapping>
+        <mapping class="com.zucc.lk31501092.mycurrencies.model.Record"></mapping>
+        <mapping class="com.zucc.lk31501092.mycurrencies.model.RateRecord"></mapping>
+        <mapping class="com.zucc.lk31501092.mycurrencies.model.Rate"></mapping>
     </list>
 
     <!--

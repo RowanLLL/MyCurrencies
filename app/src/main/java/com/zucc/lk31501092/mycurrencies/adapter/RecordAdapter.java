@@ -1,4 +1,4 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.zucc.lk31501092.mycurrencies.R;
+import com.zucc.lk31501092.mycurrencies.model.Record;
+
 import java.util.List;
 
 public class RecordAdapter extends ArrayAdapter<Record>{
     private  int resourceid;
 
-    RecordAdapter(@NonNull Context context, int resource, @NonNull List<Record> objects) {
+    public RecordAdapter(@NonNull Context context, int resource, @NonNull List<Record> objects) {
         super( context, resource, objects );
         this.resourceid = resource;
     }
@@ -30,7 +33,7 @@ public class RecordAdapter extends ArrayAdapter<Record>{
         else {
             view = convertView;
         }
-        TextView forCode = view.findViewById(R.id.forCode);
+        TextView forCode = view.findViewById( R.id.forCode);
         TextView forAmount = view.findViewById(R.id.forAmount);
         TextView homCode = view.findViewById(R.id.homCode);
         TextView homAmount = view.findViewById(R.id.homAmount);

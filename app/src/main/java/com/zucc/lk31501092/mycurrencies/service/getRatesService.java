@@ -1,33 +1,28 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.JobIntentService;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Properties;
 
 public class getRatesService extends JobIntentService {
     public static final String URL_BASE = "http://openexchangerates.org/api/latest.json?app_id=";
     static final int JOB_ID = 10111;
 
-    static void enqueueWork(Context context, Intent work) {
+    public static void enqueueWork(Context context, Intent work) {
         enqueueWork( context, getRatesService.class, JOB_ID, work );
     }
 
     @Override
-    protected void onHandleWork(@NonNull Intent intent) {
+    public void onHandleWork(@NonNull Intent intent) {
 //        new Thread( new Runnable() {
 //            @Override
 //            public void run() {

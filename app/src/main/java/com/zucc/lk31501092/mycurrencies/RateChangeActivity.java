@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -20,16 +19,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.zucc.lk31501092.mycurrencies.adapter.RateChangeAdapter;
+import com.zucc.lk31501092.mycurrencies.model.Rate;
+import com.zucc.lk31501092.mycurrencies.model.RateRecord;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static com.zucc.lk31501092.mycurrencies.SplashActivity.KEY_ARRAYLIST;
 import static com.zucc.lk31501092.mycurrencies.SplashActivity.KEY_ARRAYLISTSIMPLE;
 
 public class RateChangeActivity extends Activity {

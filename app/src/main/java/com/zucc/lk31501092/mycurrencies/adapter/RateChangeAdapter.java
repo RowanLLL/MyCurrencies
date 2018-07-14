@@ -1,4 +1,4 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.zucc.lk31501092.mycurrencies.R;
+import com.zucc.lk31501092.mycurrencies.model.Rate;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class RateChangeAdapter extends ArrayAdapter<Rate> {
         else {
             view = convertView;
         }
-        TextView forCode = view.findViewById(R.id.rateListForCode);
+        TextView forCode = view.findViewById( R.id.rateListForCode);
         TextView homCode = view.findViewById(R.id.rateListhomCode);
         TextView Amount = view.findViewById(R.id.rateListResult);
         forCode.setText( date.getForCode() );

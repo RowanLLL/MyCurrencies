@@ -1,14 +1,17 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.service;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.zucc.lk31501092.mycurrencies.model.Rate;
+import com.zucc.lk31501092.mycurrencies.model.RateRecord;
+import com.zucc.lk31501092.mycurrencies.tools.JSONParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

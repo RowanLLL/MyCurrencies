@@ -1,4 +1,4 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

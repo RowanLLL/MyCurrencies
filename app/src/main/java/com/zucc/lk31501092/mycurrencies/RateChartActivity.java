@@ -2,14 +2,14 @@ package com.zucc.lk31501092.mycurrencies;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.TextView;
+
+import com.zucc.lk31501092.mycurrencies.model.RateRecord;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +17,6 @@ import org.litepal.LitePal;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -29,14 +29,14 @@
         </activity>
 
         <service
-            android:name=".getRatesService"
+            android:name=".service.getRatesService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"
             tools:ignore="ExportedService" />
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".service.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
             android:permission=""

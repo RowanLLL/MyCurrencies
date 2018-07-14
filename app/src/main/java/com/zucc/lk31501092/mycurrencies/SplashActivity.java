@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.WindowDecorActionBar;
-import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
+
+import com.zucc.lk31501092.mycurrencies.tools.JSONParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;

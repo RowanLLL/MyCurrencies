@@ -1,4 +1,4 @@
-package com.zucc.lk31501092.mycurrencies;
+package com.zucc.lk31501092.mycurrencies.tools;
 
 import android.content.Context;
 import android.content.SharedPreferences;

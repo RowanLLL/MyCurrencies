@@ -23,6 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zucc.lk31501092.mycurrencies.model.Record;
+import com.zucc.lk31501092.mycurrencies.service.getRatesService;
+import com.zucc.lk31501092.mycurrencies.tools.JSONParser;
+import com.zucc.lk31501092.mycurrencies.tools.PrefsMgr;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +36,6 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Properties;

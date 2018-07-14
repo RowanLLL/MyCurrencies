@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.mnu_change:
                 Intent intent1 = new Intent( this, RateChangeActivity.class );
                 startActivity( intent1 );
+                break;
             case R.id.mnu_exit:
                 finish();
                 break;

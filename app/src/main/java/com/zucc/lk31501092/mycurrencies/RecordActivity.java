@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,6 +45,13 @@ public class RecordActivity extends Activity {
         ListView listView = findViewById( R.id.listview );
         listView.setAdapter( adapter );
         listView.setTextFilterEnabled( true );
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d( "click", i+"" );
+            }
+        } );
     }
 
     private void initDatas() {

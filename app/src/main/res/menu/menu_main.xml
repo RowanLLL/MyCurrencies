@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
         android:id="@+id/mnu_codes"
         android:orderInCategory="100"
-        android:title="search active codes"
-        app:showAsAction="never" />
+        android:title="显示可转换币种" />
     <item
         android:id="@+id/mnu_invert"
         android:orderInCategory="200"
-        android:title="invert codes"
-        app:showAsAction="never" />
+        android:title="交换币种" />
+
+    <item
+        android:id="@+id/mnu_record"
+        android:orderInCategory="300"
+        android:title="查看记录" />
     <item
         android:id="@+id/mnu_exit"
-        android:orderInCategory="300"
-        android:title="exit"
-        app:showAsAction="never" />
+        android:orderInCategory="400"
+        android:title="退出" />
+
 </menu>

@@ -1,5 +1,6 @@
 package com.zucc.lk31501092.mycurrencies;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,9 +29,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -90,11 +92,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mCalcButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CurrencyConverterTask().execute(URL_BASE+mKey);
+                String number = mAmountEditText.getText().toString();
+                if (number != null && !number.trim().equals( "" ))
+                    new CurrencyConverterTask().execute( URL_BASE + mKey );
             }
         } );
 
-        mKey = getKey( "open_key" );
+        mKey = getKey();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate( R.menu.menu_main, menu );
+        return true;
     }
 
     @Override
@@ -107,6 +117,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.mnu_codes:
                 launchBrowser( SplashActivity.URL_CODES );
                 break;
+            case R.id.mnu_record:
+                Intent intent = new Intent( this, RecordActivity.class );
+                startActivity( intent );
+                break;
             case R.id.mnu_exit:
                 finish();
                 break;
@@ -117,11 +131,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
+        assert cm != null;
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     private void launchBrowser(String strUri) {
@@ -179,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return (currency).substring( 0, 3 );
     }
 
-    private String getKey(String keyName) {
+    private String getKey() {
         AssetManager assetManager = this.getResources().getAssets();
         Properties properties = new Properties();
         try {
@@ -188,9 +200,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return properties.getProperty( keyName );
+        return properties.getProperty( "open_key" );
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CurrencyConverterTask extends AsyncTask<String, Void, JSONObject> {
         private ProgressDialog progressDialog;
 
@@ -216,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return new JSONParser().getJSONFromUrl( strings[0] );
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             double dCalculated = 0.0;
@@ -238,13 +252,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             jsonRates.getDouble( strHomCode )
                             / jsonRates.getDouble( strForCode );
                 }
+
+                Record record = new Record();
+                record.setForCode( strForCode );
+                record.setForAmount( strAmount );
+                record.setHomCode( strHomCode );
+                record.setHomAmount( new DecimalFormat( "0.00" ).format( dCalculated ) );
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat( "yy/MM/dd HH:mm" );
+                Date curDate = new Date( System.currentTimeMillis() );
+                record.setTime( formatter.format( curDate ) );
+                record.save();
+
             } catch (JSONException e) {
                 Toast.makeText( MainActivity.this, "There's been a JSON exception: " + e.getMessage(), Toast.LENGTH_LONG ).show();
                 mConvertedTextView.setText( "" );
                 e.printStackTrace();
             }
-            mConvertedTextView.setText( DECIMAL_FORMAT.format( dCalculated ) + " " + strHomCode);
-                    progressDialog.dismiss();
+            mConvertedTextView.setText( DECIMAL_FORMAT.format( dCalculated ) + " " + strHomCode );
+            progressDialog.dismiss();
         }
     }
 
